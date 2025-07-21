@@ -59,13 +59,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     // This needs an authorization check
-    const note = await Note.findById(req.params.id)
+    const noteToUpdate = await Note.findById(req.params.id)
 
-    if (!note) {
+    if (!noteToUpdate) {
       return res.status(404).json({ message: 'No note found with this id!' })
     }
 
-    if (!note.user.equals(req.user._id)) {
+    if (!noteToUpdate.user.equals(req.user._id)) {
       return res
         .status(403)
         .json({ message: 'Updates for this content by User are not permitted' })
@@ -85,17 +85,17 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     // This needs an authorization check
-    const note = await Note.findByIdAndDelete(req.params.id)
-    if (!note) {
+    const noteToDelete = await Note.findByIdAndDelete(req.params.id)
+    if (!noteToDelete) {
       return res.status(404).json({ message: 'No note found with this id!' })
     }
 
-    if (!note.user.equals(req.user._id)) {
+    if (!noteToDelete.user.equals(req.user._id)) {
       return res
         .status(403)
         .json({ message: 'User is not authorized to delete this content' })
     }
-    await note.deleteOne()
+    await noteToDelete.deleteOne()
     res.json({ message: 'Note deleted!' })
   } catch (err) {
     res.status(500).json(err)
