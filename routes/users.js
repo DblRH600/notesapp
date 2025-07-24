@@ -8,6 +8,7 @@ const router = express.Router();
 // POST /api/users/register - Create a new user
 router.post("/register", async (req, res) => {
   try {
+    console.log(req.body)
     const user = await User.create(req.body);
     const token = signToken(user);
     res.status(201).json({ token, user });
